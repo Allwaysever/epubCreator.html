@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>EPUB 3 Completer - Dark Rounded Edition</title>
+    <title>EPUB 3 Completer</title>
     
-    <!-- Font Awesome 6 (Beta3) sesuai panduan -->
+    <!-- Font Awesome 6 (Beta3) as per guidelines -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- JSZip -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -59,17 +59,17 @@
 
         /* ===== DESIGN TOKENS (CSS Variables) ===== */
         :root {
-            /* Warna Utama Gelap */
+            /* Dark theme colors */
             --accent: #ffce00;
             --bg-body: #1B1C1E;
             --bg-card: #0f0f0f;
             --text-primary: #ffffff;
             --text-accent: #000000;
-            /* Netral */
+            /* Neutral */
             --border-color: #4B4F50;
             --text-secondary: #999999;
             --text-tertiary: #666666;
-            /* Semantik */
+            /* Semantic */
             --success: #4CAF50;
             --error: #F44336;
             /* Radius */
@@ -91,12 +91,12 @@
             --duration-fast: 0.1s;
             --duration-normal: 0.3s;
             --easing-press: ease-out;
-            /* Interaksi scale */
+            /* Interaction scale */
             --hover-scale: 0.96;
             --active-scale: 0.92;
         }
 
-        /* Font Outfit dari CDN resmi (Allwaysever) */
+        /* Outfit Font from official CDN */
         @font-face {
             font-family: 'Outfit';
             src: url('https://cdn.jsdelivr.net/gh/Allwaysever/SuperRoundedUI/fonts/outfit-Regular.ttf') format('truetype');
@@ -149,7 +149,7 @@
             color: var(--text-accent);
         }
 
-        /* Tombol dengan efek press (scale-down) */
+        /* Buttons with press effect (scale-down) */
         .btn-press {
             transition: transform var(--duration-fast) var(--easing-press);
             will-change: transform;
@@ -179,7 +179,7 @@
             pointer-events: none;
             transform: none;
         }
-        /* Tombol sekunder */
+        /* Secondary button */
         .btn-secondary {
             background-color: transparent;
             color: var(--text-primary);
@@ -252,7 +252,7 @@
             background-color: #1a1c20;
         }
 
-        /* Bab list & Media */
+        /* Chapter list & Media */
         .bab-list, .media-summary {
             background-color: #0a0a0c;
             border-radius: var(--radius-md);
@@ -382,46 +382,46 @@
 <div class="container">
     <div class="card">
         <h1><i class="fas fa-book-open" style="color: #ffce00; margin-right: 8px;"></i> EPUB 3 Completer</h1>
-        <div class="sub">Struktur profesional | ZIP siap pakai | Metadata lengkap</div>
+        <div class="sub">Professional structure | Ready-to-use ZIP | Full metadata</div>
     </div>
 
     <!-- Metadata -->
     <div class="card">
-        <h2><i class="fas fa-pen-fancy"></i> Metadata Buku</h2>
+        <h2><i class="fas fa-pen-fancy"></i> Book Metadata</h2>
         <div class="form-group">
-            <label>Judul Utama *</label>
-            <input type="text" id="mainTitle" placeholder="Judul Buku" value="Buku EPUB 3">
+            <label>Main Title *</label>
+            <input type="text" id="mainTitle" placeholder="Book Title" value="Buku EPUB 3">
         </div>
         <div class="form-group">
-            <label>Subjudul (opsional)</label>
-            <input type="text" id="subTitle" placeholder="Subjudul">
+            <label>Subtitle (optional)</label>
+            <input type="text" id="subTitle" placeholder="Subtitle">
         </div>
         <div class="form-group">
-            <label>Volume (opsional)</label>
+            <label>Volume (optional)</label>
             <input type="text" id="volume" placeholder="Volume 1">
         </div>
         
-        <!-- Judul Tambahan -->
+        <!-- Additional Titles -->
         <div class="form-group">
-            <label><i class="fas fa-tag"></i> Judul Tambahan</label>
+            <label><i class="fas fa-tag"></i> Additional Titles</label>
             <div id="extraTitlesContainer"></div>
-            <button type="button" id="addExtraTitleBtn" class="btn-sm success" style="margin-top:6px;"><i class="fas fa-plus"></i> Tambah Judul</button>
+            <button type="button" id="addExtraTitleBtn" class="btn-sm success" style="margin-top:6px;"><i class="fas fa-plus"></i> Add Title</button>
         </div>
 
         <div class="form-group">
-            <label>Penulis (Creator) *</label>
+            <label>Author (Creator) *</label>
             <input type="text" id="creator" value="Penulis Utama">
         </div>
 
-        <!-- Kontributor -->
+        <!-- Contributors -->
         <div class="form-group">
-            <label><i class="fas fa-users"></i> Kontributor (nama, peran opsional)</label>
+            <label><i class="fas fa-users"></i> Contributors (name, optional role)</label>
             <div id="contributorsContainer"></div>
-            <button type="button" id="addContributorBtn" class="btn-sm success" style="margin-top:6px;"><i class="fas fa-user-plus"></i> Tambah Kontributor</button>
+            <button type="button" id="addContributorBtn" class="btn-sm success" style="margin-top:6px;"><i class="fas fa-user-plus"></i> Add Contributor</button>
         </div>
 
         <div class="form-group">
-            <label>Bahasa (id, en, dll)</label>
+            <label>Language (id, en, etc.)</label>
             <input type="text" id="language" value="id">
         </div>
         <div class="form-group">
@@ -429,56 +429,56 @@
             <input type="text" id="identifier" placeholder="urn:uuid:xxxx" value="urn:uuid:123e4567-e89b-12d3-a456-426614174000">
         </div>
         <div class="form-group">
-            <label>Tanggal (YYYY-MM-DD)</label>
+            <label>Date (YYYY-MM-DD)</label>
             <input type="date" id="date" value="2026-06-05">
         </div>
         <div class="form-group">
-            <label>Penerbit</label>
+            <label>Publisher</label>
             <input type="text" id="publisher">
         </div>
         <div class="form-group">
-            <label>Deskripsi (sinopsis)</label>
+            <label>Description (synopsis)</label>
             <textarea id="description" rows="2"></textarea>
         </div>
         <div class="form-group">
-            <label>Subjek (pisah koma)</label>
-            <input type="text" id="subjects" placeholder="Fiksi, Petualangan">
+            <label>Subjects (comma separated)</label>
+            <input type="text" id="subjects" placeholder="Fiction, Adventure">
         </div>
         <div class="form-group">
-            <label>Nama Seri</label>
+            <label>Series Name</label>
             <input type="text" id="collectionName">
         </div>
         <div class="form-group">
-            <label>Nomor Seri</label>
+            <label>Series Number</label>
             <input type="text" id="collectionNumber">
         </div>
     </div>
 
     <!-- Upload ZIP -->
     <div class="card">
-        <h2><i class="fas fa-upload"></i> Upload Proyek ZIP</h2>
+        <h2><i class="fas fa-upload"></i> Upload Project ZIP</h2>
         <div class="file-zone" id="fileZone">
             <i class="fas fa-folder-open" style="font-size: 2rem; margin-bottom: 8px; display: block; color: #ffce00;"></i>
-            <div>📁 Tap / klik untuk pilih file ZIP</div>
+            <div>📁 Tap / Click to select ZIP file</div>
             <input type="file" id="zipInput" accept=".zip" style="display: none;">
-            <div style="font-size:0.75rem; margin-top:8px; color: #999;">(ZIP dengan struktur apapun, akan diatur ulang)</div>
+            <div style="font-size:0.75rem; margin-top:8px; color: #999;">(ZIP with any structure, will be reorganized)</div>
         </div>
         <div id="status" class="info"></div>
         <div class="progress" id="progressBar" style="display:none;"><div class="progress-bar"></div></div>
         
-        <h2><i class="fas fa-list-ol"></i> Urutan Bab (Spine)</h2>
+        <h2><i class="fas fa-list-ol"></i> Chapter Order (Spine)</h2>
         <div id="babListContainer" class="bab-list" style="min-height: 70px;"></div>
         
-        <h2><i class="fas fa-images"></i> Media Terdeteksi</h2>
+        <h2><i class="fas fa-images"></i> Detected Media</h2>
         <div id="mediaSummary" class="info" style="margin-top: 0;"></div>
     </div>
 
     <div class="flex-buttons">
-        <button id="downloadTemplateBtn" class="btn-press btn-secondary" style="background:#2a2c2f; color:white;"><i class="fas fa-download"></i> Template Chapter</button>
+        <button id="downloadTemplateBtn" class="btn-press btn-secondary" style="background:#2a2c2f; color:white;"><i class="fas fa-download"></i> Chapter Template</button>
     </div>
 
-    <button id="generateBtn" class="btn-press"><i class="fas fa-magic"></i> Generate & Download EPUB Struktur</button>
-    <footer><i class="fas fa-code-branch"></i> Hasil ZIP: <code>mimetype</code> (root) + <code>META-INF/container.xml</code> + folder <code>EPUB/</code>. Siap publikasi.</footer>
+    <button id="generateBtn" class="btn-press"><i class="fas fa-magic"></i> Generate & Download EPUB Structure</button>
+    <footer><i class="fas fa-code-branch"></i> Result ZIP: <code>mimetype</code> (root) + <code>META-INF/container.xml</code> + <code>EPUB/</code> folder. Ready for publication.</footer>
 </div>
 
 <script>
@@ -507,15 +507,15 @@
     function downloadTemplateChapter() {
         const template = `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="id" lang="id">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <title>Judul Bab</title>
+    <title>Chapter Title</title>
     <meta name="viewport" content="width=device-width, height=device-height"/>
 </head>
 <body>
-    <h1>Judul Bab</h1>
-    <p>Ini adalah paragraf pertama. Silakan edit sesuai kebutuhan.</p>
-    <p>Kamu bisa menambahkan gambar dengan tag <code>&lt;img src="images/namagambar.png" alt="deskripsi"/&gt;</code>.</p>
+    <h1>Chapter Title</h1>
+    <p>This is the first paragraph. Please edit as needed.</p>
+    <p>You can add images with the tag <code>&lt;img src="images/yourimage.png" alt="description"/&gt;</code>.</p>
 </body>
 </html>`;
         const blob = new Blob([template], { type: "application/xhtml+xml" });
@@ -536,8 +536,8 @@
         if (!container) return;
         container.innerHTML = extraTitles.map((title, idx) => `
             <div class="dynamic-item">
-                <input type="text" placeholder="Judul tambahan" value="${escapeHtml(title)}" data-idx="${idx}" class="extra-title-input">
-                <button class="btn-sm danger remove-extra-title" data-idx="${idx}"><i class="fas fa-trash-alt"></i> Hapus</button>
+                <input type="text" placeholder="Additional title" value="${escapeHtml(title)}" data-idx="${idx}" class="extra-title-input">
+                <button class="btn-sm danger remove-extra-title" data-idx="${idx}"><i class="fas fa-trash-alt"></i> Remove</button>
             </div>
         `).join('');
         document.querySelectorAll('.extra-title-input').forEach(inp => {
@@ -560,8 +560,8 @@
         if (!container) return;
         container.innerHTML = contributors.map((c, idx) => `
             <div class="dynamic-item">
-                <input type="text" placeholder="Nama" value="${escapeHtml(c.name)}" data-idx="${idx}" class="contrib-name" style="flex:2;">
-                <input type="text" placeholder="Peran (ctb, edt, ill)" value="${escapeHtml(c.role)}" data-idx="${idx}" class="contrib-role" style="flex:1;">
+                <input type="text" placeholder="Name" value="${escapeHtml(c.name)}" data-idx="${idx}" class="contrib-name" style="flex:2;">
+                <input type="text" placeholder="Role (ctb, edt, ill)" value="${escapeHtml(c.role)}" data-idx="${idx}" class="contrib-role" style="flex:1;">
                 <button class="btn-sm danger remove-contrib" data-idx="${idx}"><i class="fas fa-user-minus"></i></button>
             </div>
         `).join('');
@@ -598,10 +598,10 @@
     async function handleZipUpload(e) {
         const file = e.target.files[0];
         if (!file || !file.name.endsWith('.zip')) {
-            statusDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Pilih file ZIP yang valid.';
+            statusDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Please select a valid ZIP file.';
             return;
         }
-        statusDiv.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Membaca ZIP...';
+        statusDiv.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Reading ZIP...';
         progressBar.style.display = 'block';
         document.querySelector('.progress-bar').style.width = '20%';
         try {
@@ -659,19 +659,19 @@
             babItems.sort((a,b) => a.name.localeCompare(b.name));
             renderBabList();
             renderMediaSummary();
-            statusDiv.innerHTML = `<i class="fas fa-check-circle"></i> ZIP siap: ${allFiles.length} file, ${babItems.length} bab, ${mediaItems.images.length} gambar, ${mediaItems.audio.length} audio. Atur urutan bab!`;
+            statusDiv.innerHTML = `<i class="fas fa-check-circle"></i> ZIP ready: ${allFiles.length} files, ${babItems.length} chapters, ${mediaItems.images.length} images, ${mediaItems.audio.length} audio. Arrange chapter order!`;
             document.querySelector('.progress-bar').style.width = '100%';
             setTimeout(() => { progressBar.style.display = 'none'; document.querySelector('.progress-bar').style.width = '0%'; }, 600);
         } catch (err) {
             console.error(err);
-            statusDiv.innerHTML = '<i class="fas fa-times-circle"></i> Gagal membaca ZIP. Pastikan format benar.';
+            statusDiv.innerHTML = '<i class="fas fa-times-circle"></i> Failed to read ZIP. Please ensure format is correct.';
             progressBar.style.display = 'none';
         }
     }
 
     function renderBabList() {
         if (babItems.length === 0) {
-            babContainer.innerHTML = '<div style="padding:1rem; color:#999; text-align:center;"><i class="fas fa-file-alt"></i> Tidak ada file bab XHTML (kecuali cover/toc). Upload ZIP berisi .xhtml.</div>';
+            babContainer.innerHTML = '<div style="padding:1rem; color:#999; text-align:center;"><i class="fas fa-file-alt"></i> No chapter XHTML files found (excluding cover/toc). Upload a ZIP containing .xhtml files.</div>';
             return;
         }
         let html = '';
@@ -735,7 +735,7 @@
     }
 
     function renderMediaSummary() {
-        mediaSummary.innerHTML = `<i class="fas fa-image"></i> ${mediaItems.images.length} Gambar &nbsp;|&nbsp; <i class="fas fa-headphones"></i> ${mediaItems.audio.length} Audio &nbsp;|&nbsp; Cover: ${coverImagePath ? '<span style="color:#ffce00;">✅ Ditemukan</span>' : '<span style="color:#ff9e9e;">❌ Tidak ditemukan (opsional)</span>'}`;
+        mediaSummary.innerHTML = `<i class="fas fa-image"></i> ${mediaItems.images.length} Images &nbsp;|&nbsp; <i class="fas fa-headphones"></i> ${mediaItems.audio.length} Audio &nbsp;|&nbsp; Cover: ${coverImagePath ? '<span style="color:#ffce00;">✅ Found</span>' : '<span style="color:#ff9e9e;">❌ Not found (optional)</span>'}`;
     }
 
     function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); }
@@ -743,11 +743,11 @@
 
     // GENERATE FINAL ZIP
     generateBtn.addEventListener('click', async () => {
-        if (!originalZip) { statusDiv.innerHTML = '<i class="fas fa-ban"></i> Upload ZIP terlebih dahulu.'; return; }
+        if (!originalZip) { statusDiv.innerHTML = '<i class="fas fa-ban"></i> Please upload a ZIP file first.'; return; }
         const mainTitle = document.getElementById('mainTitle').value.trim();
-        if (!mainTitle) { alert("Judul utama wajib diisi."); return; }
+        if (!mainTitle) { alert("Main title is required."); return; }
         const creator = document.getElementById('creator').value.trim();
-        if (!creator) { alert("Penulis wajib diisi."); return; }
+        if (!creator) { alert("Author is required."); return; }
         const language = document.getElementById('language').value.trim() || 'id';
         let identifier = document.getElementById('identifier').value.trim();
         if (!identifier) identifier = "urn:uuid:" + crypto.randomUUID();
@@ -769,7 +769,7 @@
         contributors.forEach(c => { if(c.name.trim()) allContributors.push({ name: c.name.trim(), role: c.role.trim() || "ctb" }); });
 
         const newZip = new JSZip();
-        // Salin file non-struktural
+        // Copy non-structural files
         const skipPaths = ['content.opf', 'META-INF/container.xml', 'toc.xhtml', 'nav.xhtml', 'cover.xhtml', 'mimetype'];
         for (const [origPath, entry] of Object.entries(zipFiles)) {
             if (skipPaths.includes(origPath) || origPath.startsWith('META-INF/')) continue;
@@ -794,7 +794,7 @@
 
         const tocPath = "toc.xhtml";
         let navPoints = babItems.map(bab => `<li><a href="${escapeXml(bab.path.startsWith('EPUB/')?bab.path.substring(5):bab.path)}">${escapeXml(bab.title)}</a></li>`).join("\n");
-        const tocContent = `<?xml version="1.0"?><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Daftar Isi</title></head><body><nav epub:type="toc"><h1>Daftar Isi</h1><ol>${navPoints}</ol></nav></body></html>`;
+        const tocContent = `<?xml version="1.0"?><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Table of Contents</title></head><body><nav epub:type="toc"><h1>Table of Contents</h1><ol>${navPoints}</ol></nav></body></html>`;
         newZip.file("EPUB/" + tocPath, tocContent);
         manifest.push(`<item id="toc" href="${tocPath}" media-type="application/xhtml+xml" properties="nav"/>`);
         spine.push(`<itemref idref="toc" linear="no"/>`);
@@ -826,11 +826,11 @@
         const opf = `<?xml version="1.0" encoding="UTF-8"?><package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="pub-id" xml:lang="${language}"><metadata xmlns:dc="http://purl.org/dc/elements/1.1/">${metadata.join("\n    ")}</metadata><manifest>${manifest.join("\n    ")}</manifest><spine page-progression-direction="ltr">${spine.join("\n    ")}</spine></package>`;
         newZip.file("EPUB/content.opf", opf);
 
-        statusDiv.innerHTML = '<i class="fas fa-cog fa-spin"></i> Membuat arsip akhir...';
+        statusDiv.innerHTML = '<i class="fas fa-cog fa-spin"></i> Creating final archive...';
         const zipBlob = await newZip.generateAsync({ type: "blob", compression: "DEFLATE", compressionOptions: { level: 6 } });
         const url = URL.createObjectURL(zipBlob);
         const a = document.createElement('a'); a.href = url; a.download = "epub_completed.zip"; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
-        statusDiv.innerHTML = '<i class="fas fa-check-circle"></i> Berhasil! File ZIP dengan struktur EPUB/ siap. Ekstrak dan kompres ulang dengan mimetype STORE.';
+        statusDiv.innerHTML = '<i class="fas fa-check-circle"></i> Success! ZIP file with EPUB/ structure ready. Extract and recompress with mimetype STORE.';
     });
 </script>
 </body>
