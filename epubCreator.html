@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>EPUB 3 Completer - Dark Rounded Edition</title>
+    
+    <!-- Font Awesome 6 (Beta3) sesuai panduan -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- JSZip -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    
+    <style>
+        /* ===== SRUI BASE RESET & DARK THEME (No branding text) ===== */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            font-size: 100%;
+            -webkit-text-size-adjust: 100%;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: #1B1C1E;
+            color: #ffffff;
+            font-family: 'Outfit', system-ui, -apple-system, 'Segoe UI', sans-serif;
+            line-height: 1.5;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        img, svg {
+            display: block;
+            max-width: 100%;
+        }
+
+        :focus-visible {
+            outline: 2px solid #ffce00;
+            outline-offset: 2px;
+            transition: outline-offset 0.1s ease-out;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* ===== DESIGN TOKENS (CSS Variables) ===== */
+        :root {
+            /* Warna Utama Gelap */
+            --accent: #ffce00;
+            --bg-body: #1B1C1E;
+            --bg-card: #0f0f0f;
+            --text-primary: #ffffff;
+            --text-accent: #000000;
+            /* Netral */
+            --border-color: #4B4F50;
+            --text-secondary: #999999;
+            --text-tertiary: #666666;
+            /* Semantik */
+            --success: #4CAF50;
+            --error: #F44336;
+            /* Radius */
+            --radius-sm: 12px;
+            --radius-md: 15px;
+            --radius-lg: 25px;
+            --radius-pill: 9999px;
+            /* Spacing (4px scale) */
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            /* Shadow flat minimal */
+            --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.4);
+            --shadow-raised: 0 4px 12px rgba(0, 0, 0, 0.5);
+            /* Motion */
+            --duration-fast: 0.1s;
+            --duration-normal: 0.3s;
+            --easing-press: ease-out;
+            /* Interaksi scale */
+            --hover-scale: 0.96;
+            --active-scale: 0.92;
+        }
+
+        /* Font Outfit dari CDN resmi (Allwaysever) */
+        @font-face {
+            font-family: 'Outfit';
+            src: url('https://cdn.jsdelivr.net/gh/Allwaysever/SuperRoundedUI/fonts/outfit-Regular.ttf') format('truetype');
+            font-weight: 400;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Outfit';
+            src: url('https://cdn.jsdelivr.net/gh/Allwaysever/SuperRoundedUI/fonts/outfit-Medium.ttf') format('truetype');
+            font-weight: 500;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Outfit';
+            src: url('https://cdn.jsdelivr.net/gh/Allwaysever/SuperRoundedUI/fonts/outfit-Bold.ttf') format('truetype');
+            font-weight: 700;
+            font-display: swap;
+        }
+
+        /* ===== UTILITY CLASSES (Pure CSS) ===== */
+        .card {
+            background-color: var(--bg-card);
+            border-radius: var(--radius-md);
+            padding: var(--space-6);
+            margin-bottom: var(--space-6);
+            box-shadow: var(--shadow-card);
+            transition: transform var(--duration-fast) var(--easing-press);
+        }
+
+        .glass-layer {
+            background-color: rgba(27, 28, 30, 0.9);
+            backdrop-filter: blur(8px);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-raised);
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            padding: var(--space-1) var(--space-3);
+            border-radius: var(--radius-pill);
+            background-color: var(--bg-card);
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.875rem;
+            gap: 0.5rem;
+        }
+        .chip-accent {
+            background-color: var(--accent);
+            color: var(--text-accent);
+        }
+
+        /* Tombol dengan efek press (scale-down) */
+        .btn-press {
+            transition: transform var(--duration-fast) var(--easing-press);
+            will-change: transform;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            border: none;
+            font-weight: 600;
+            border-radius: var(--radius-pill);
+            padding: 0.75rem 1.25rem;
+            font-size: 1rem;
+            font-family: inherit;
+            background-color: var(--accent);
+            color: var(--text-accent);
+            width: 100%;
+        }
+        .btn-press:hover {
+            transform: scale(var(--hover-scale));
+        }
+        .btn-press:active {
+            transform: scale(var(--active-scale));
+        }
+        .btn-press:disabled, .btn-press[aria-disabled="true"] {
+            opacity: 0.5;
+            pointer-events: none;
+            transform: none;
+        }
+        /* Tombol sekunder */
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 0.6rem 1rem;
+        }
+        .btn-secondary:hover {
+            background-color: rgba(255,255,255,0.05);
+        }
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+            width: auto;
+            background-color: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-pill);
+        }
+        .btn-sm.danger {
+            border-color: var(--error);
+            color: #ff9e9e;
+        }
+        .btn-sm.success {
+            background-color: var(--accent);
+            color: var(--text-accent);
+            border: none;
+        }
+
+        /* Input style */
+        input, textarea, select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background-color: #1e1f22;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-family: inherit;
+            font-size: 1rem;
+            color: var(--text-primary);
+            transition: border 0.2s;
+        }
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--accent);
+            outline: none;
+        }
+        label {
+            font-weight: 500;
+            display: block;
+            margin-bottom: var(--space-2);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        textarea {
+            font-family: monospace;
+            resize: vertical;
+        }
+
+        /* File Zone */
+        .file-zone {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 2rem 1rem;
+            text-align: center;
+            background-color: #131316;
+            margin-bottom: var(--space-4);
+            cursor: pointer;
+            transition: border 0.2s, background 0.2s;
+        }
+        .file-zone:hover {
+            border-color: var(--accent);
+            background-color: #1a1c20;
+        }
+
+        /* Bab list & Media */
+        .bab-list, .media-summary {
+            background-color: #0a0a0c;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            margin-top: var(--space-3);
+            overflow: hidden;
+        }
+        .bab-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--bg-card);
+            transition: background 0.1s;
+        }
+        .bab-item:last-child {
+            border-bottom: none;
+        }
+        .bab-handle {
+            cursor: grab;
+            margin-right: 12px;
+            color: var(--text-tertiary);
+            font-size: 1.2rem;
+        }
+        .dynamic-item {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 10px;
+            background: #131316;
+            padding: 0.6rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+        }
+        .dynamic-item input {
+            flex: 1;
+            margin: 0;
+        }
+        .progress {
+            background-color: #2a2c2f;
+            border-radius: var(--radius-pill);
+            height: 8px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+        .progress-bar {
+            background-color: var(--accent);
+            width: 0%;
+            height: 100%;
+            transition: width 0.3s;
+        }
+        .info {
+            background: rgba(255, 206, 0, 0.1);
+            padding: 0.8rem;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            margin: 1rem 0;
+            color: var(--text-secondary);
+            border-left: 3px solid var(--accent);
+        }
+        .flex-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+        .flex-buttons button {
+            flex: 1;
+        }
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            letter-spacing: -0.3px;
+        }
+        h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 0 0 1rem 0;
+            border-left: 4px solid var(--accent);
+            padding-left: 12px;
+        }
+        .sub {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+        footer {
+            text-align: center;
+            font-size: 0.7rem;
+            color: var(--text-tertiary);
+            margin-top: 2rem;
+        }
+        code {
+            background: #1e1f22;
+            padding: 0.2rem 0.4rem;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.85rem;
+        }
+        .container {
+            max-width: 760px;
+            margin: 0 auto;
+        }
+        .move-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 4px 8px;
+            margin-left: 6px;
+            cursor: pointer;
+            color: white;
+        }
+        .move-btn:hover {
+            background: #2c2e33;
+        }
+        @media (max-width: 560px) {
+            .container { padding: 0; }
+            body { padding: 0.8rem; }
+            .card { padding: var(--space-4); }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <h1><i class="fas fa-book-open" style="color: #ffce00; margin-right: 8px;"></i> EPUB 3 Completer</h1>
+        <div class="sub">Struktur profesional | ZIP siap pakai | Metadata lengkap</div>
+    </div>
+
+    <!-- Metadata -->
+    <div class="card">
+        <h2><i class="fas fa-pen-fancy"></i> Metadata Buku</h2>
+        <div class="form-group">
+            <label>Judul Utama *</label>
+            <input type="text" id="mainTitle" placeholder="Judul Buku" value="Buku EPUB 3">
+        </div>
+        <div class="form-group">
+            <label>Subjudul (opsional)</label>
+            <input type="text" id="subTitle" placeholder="Subjudul">
+        </div>
+        <div class="form-group">
+            <label>Volume (opsional)</label>
+            <input type="text" id="volume" placeholder="Volume 1">
+        </div>
+        
+        <!-- Judul Tambahan -->
+        <div class="form-group">
+            <label><i class="fas fa-tag"></i> Judul Tambahan</label>
+            <div id="extraTitlesContainer"></div>
+            <button type="button" id="addExtraTitleBtn" class="btn-sm success" style="margin-top:6px;"><i class="fas fa-plus"></i> Tambah Judul</button>
+        </div>
+
+        <div class="form-group">
+            <label>Penulis (Creator) *</label>
+            <input type="text" id="creator" value="Penulis Utama">
+        </div>
+
+        <!-- Kontributor -->
+        <div class="form-group">
+            <label><i class="fas fa-users"></i> Kontributor (nama, peran opsional)</label>
+            <div id="contributorsContainer"></div>
+            <button type="button" id="addContributorBtn" class="btn-sm success" style="margin-top:6px;"><i class="fas fa-user-plus"></i> Tambah Kontributor</button>
+        </div>
+
+        <div class="form-group">
+            <label>Bahasa (id, en, dll)</label>
+            <input type="text" id="language" value="id">
+        </div>
+        <div class="form-group">
+            <label>Identifier (UUID/ISBN) *</label>
+            <input type="text" id="identifier" placeholder="urn:uuid:xxxx" value="urn:uuid:123e4567-e89b-12d3-a456-426614174000">
+        </div>
+        <div class="form-group">
+            <label>Tanggal (YYYY-MM-DD)</label>
+            <input type="date" id="date" value="2026-06-05">
+        </div>
+        <div class="form-group">
+            <label>Penerbit</label>
+            <input type="text" id="publisher">
+        </div>
+        <div class="form-group">
+            <label>Deskripsi (sinopsis)</label>
+            <textarea id="description" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+            <label>Subjek (pisah koma)</label>
+            <input type="text" id="subjects" placeholder="Fiksi, Petualangan">
+        </div>
+        <div class="form-group">
+            <label>Nama Seri</label>
+            <input type="text" id="collectionName">
+        </div>
+        <div class="form-group">
+            <label>Nomor Seri</label>
+            <input type="text" id="collectionNumber">
+        </div>
+    </div>
+
+    <!-- Upload ZIP -->
+    <div class="card">
+        <h2><i class="fas fa-upload"></i> Upload Proyek ZIP</h2>
+        <div class="file-zone" id="fileZone">
+            <i class="fas fa-folder-open" style="font-size: 2rem; margin-bottom: 8px; display: block; color: #ffce00;"></i>
+            <div>📁 Tap / klik untuk pilih file ZIP</div>
+            <input type="file" id="zipInput" accept=".zip" style="display: none;">
+            <div style="font-size:0.75rem; margin-top:8px; color: #999;">(ZIP dengan struktur apapun, akan diatur ulang)</div>
+        </div>
+        <div id="status" class="info"></div>
+        <div class="progress" id="progressBar" style="display:none;"><div class="progress-bar"></div></div>
+        
+        <h2><i class="fas fa-list-ol"></i> Urutan Bab (Spine)</h2>
+        <div id="babListContainer" class="bab-list" style="min-height: 70px;"></div>
+        
+        <h2><i class="fas fa-images"></i> Media Terdeteksi</h2>
+        <div id="mediaSummary" class="info" style="margin-top: 0;"></div>
+    </div>
+
+    <div class="flex-buttons">
+        <button id="downloadTemplateBtn" class="btn-press btn-secondary" style="background:#2a2c2f; color:white;"><i class="fas fa-download"></i> Template Chapter</button>
+    </div>
+
+    <button id="generateBtn" class="btn-press"><i class="fas fa-magic"></i> Generate & Download EPUB Struktur</button>
+    <footer><i class="fas fa-code-branch"></i> Hasil ZIP: <code>mimetype</code> (root) + <code>META-INF/container.xml</code> + folder <code>EPUB/</code>. Siap publikasi.</footer>
+</div>
+
+<script>
+    // ======================= STATE =======================
+    let zipFiles = {};
+    let babItems = [];
+    let mediaItems = { images: [], audio: [] };
+    let coverImagePath = null;
+    let hasCoverXhtml = false;
+    let hasTocNav = false;
+    let originalZip = null;
+    let extraTitles = [];
+    let contributors = [];
+
+    // DOM elements
+    const fileZone = document.getElementById('fileZone');
+    const zipInput = document.getElementById('zipInput');
+    const statusDiv = document.getElementById('status');
+    const progressBar = document.getElementById('progressBar');
+    const babContainer = document.getElementById('babListContainer');
+    const mediaSummary = document.getElementById('mediaSummary');
+    const generateBtn = document.getElementById('generateBtn');
+    const downloadTemplateBtn = document.getElementById('downloadTemplateBtn');
+
+    // Helper: download template chapter.xhtml
+    function downloadTemplateChapter() {
+        const template = `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="id" lang="id">
+<head>
+    <title>Judul Bab</title>
+    <meta name="viewport" content="width=device-width, height=device-height"/>
+</head>
+<body>
+    <h1>Judul Bab</h1>
+    <p>Ini adalah paragraf pertama. Silakan edit sesuai kebutuhan.</p>
+    <p>Kamu bisa menambahkan gambar dengan tag <code>&lt;img src="images/namagambar.png" alt="deskripsi"/&gt;</code>.</p>
+</body>
+</html>`;
+        const blob = new Blob([template], { type: "application/xhtml+xml" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = "template-chapter.xhtml";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+    downloadTemplateBtn.addEventListener('click', downloadTemplateChapter);
+
+    // Render dynamic titles & contributors
+    function renderExtraTitles() {
+        const container = document.getElementById('extraTitlesContainer');
+        if (!container) return;
+        container.innerHTML = extraTitles.map((title, idx) => `
+            <div class="dynamic-item">
+                <input type="text" placeholder="Judul tambahan" value="${escapeHtml(title)}" data-idx="${idx}" class="extra-title-input">
+                <button class="btn-sm danger remove-extra-title" data-idx="${idx}"><i class="fas fa-trash-alt"></i> Hapus</button>
+            </div>
+        `).join('');
+        document.querySelectorAll('.extra-title-input').forEach(inp => {
+            inp.addEventListener('change', (e) => {
+                const idx = parseInt(inp.dataset.idx);
+                extraTitles[idx] = inp.value;
+            });
+        });
+        document.querySelectorAll('.remove-extra-title').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const idx = parseInt(btn.dataset.idx);
+                extraTitles.splice(idx, 1);
+                renderExtraTitles();
+            });
+        });
+    }
+
+    function renderContributors() {
+        const container = document.getElementById('contributorsContainer');
+        if (!container) return;
+        container.innerHTML = contributors.map((c, idx) => `
+            <div class="dynamic-item">
+                <input type="text" placeholder="Nama" value="${escapeHtml(c.name)}" data-idx="${idx}" class="contrib-name" style="flex:2;">
+                <input type="text" placeholder="Peran (ctb, edt, ill)" value="${escapeHtml(c.role)}" data-idx="${idx}" class="contrib-role" style="flex:1;">
+                <button class="btn-sm danger remove-contrib" data-idx="${idx}"><i class="fas fa-user-minus"></i></button>
+            </div>
+        `).join('');
+        document.querySelectorAll('.contrib-name').forEach(inp => {
+            inp.addEventListener('change', (e) => {
+                const idx = parseInt(inp.dataset.idx);
+                contributors[idx].name = inp.value;
+            });
+        });
+        document.querySelectorAll('.contrib-role').forEach(inp => {
+            inp.addEventListener('change', (e) => {
+                const idx = parseInt(inp.dataset.idx);
+                contributors[idx].role = inp.value;
+            });
+        });
+        document.querySelectorAll('.remove-contrib').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const idx = parseInt(btn.dataset.idx);
+                contributors.splice(idx, 1);
+                renderContributors();
+            });
+        });
+    }
+
+    document.getElementById('addExtraTitleBtn')?.addEventListener('click', () => { extraTitles.push(''); renderExtraTitles(); });
+    document.getElementById('addContributorBtn')?.addEventListener('click', () => { contributors.push({ name: '', role: '' }); renderContributors(); });
+    renderExtraTitles();
+    renderContributors();
+
+    // Upload ZIP logic
+    fileZone.addEventListener('click', () => zipInput.click());
+    zipInput.addEventListener('change', handleZipUpload);
+
+    async function handleZipUpload(e) {
+        const file = e.target.files[0];
+        if (!file || !file.name.endsWith('.zip')) {
+            statusDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Pilih file ZIP yang valid.';
+            return;
+        }
+        statusDiv.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Membaca ZIP...';
+        progressBar.style.display = 'block';
+        document.querySelector('.progress-bar').style.width = '20%';
+        try {
+            const zip = await JSZip.loadAsync(file);
+            originalZip = zip;
+            zipFiles = {};
+            babItems = [];
+            mediaItems = { images: [], audio: [] };
+            coverImagePath = null;
+            hasCoverXhtml = false;
+            hasTocNav = false;
+
+            const allFiles = Object.keys(zip.files);
+            let processed = 0;
+            for (const relPath of allFiles) {
+                if (zip.files[relPath].dir) continue;
+                const zipFile = zip.files[relPath];
+                const name = relPath.split('/').pop();
+                const ext = name.split('.').pop().toLowerCase();
+                let type = 'other';
+                if (name.match(/\.(png|jpg|jpeg|gif|webp|svg)$/i)) type = 'image';
+                else if (name.match(/\.(mp3|m4a|ogg|wav)$/i)) type = 'audio';
+                else if (name.match(/\.(xhtml|html|xml)$/i)) type = 'xhtml';
+                else if (name === 'mimetype') type = 'mimetype';
+                else if (name === 'container.xml') type = 'container';
+                else if (name.endsWith('.css')) type = 'css';
+
+                let content = null;
+                if (type === 'xhtml' || type === 'css' || type === 'container' || type === 'mimetype') {
+                    content = await zipFile.async('string');
+                }
+                zipFiles[relPath] = { path: relPath, name, type, content, zipFile };
+
+                if (type === 'image') {
+                    if (relPath.toLowerCase().includes('cover') || name.match(/^cover\./i)) coverImagePath = relPath;
+                    mediaItems.images.push({ path: relPath, name });
+                } else if (type === 'audio') {
+                    mediaItems.audio.push({ path: relPath, name });
+                } else if (type === 'xhtml') {
+                    if (name === 'cover.xhtml' || name === 'cover.html') hasCoverXhtml = true;
+                    else if (name === 'toc.xhtml' || name === 'nav.xhtml') hasTocNav = true;
+                    else {
+                        let title = name.replace(/\.xhtml$/i, '').replace(/\.html$/i, '');
+                        if (content) {
+                            const titleMatch = content.match(/<title[^>]*>([^<]*)<\/title>/i);
+                            if (titleMatch && titleMatch[1]) title = titleMatch[1].trim();
+                        }
+                        babItems.push({ path: relPath, name, title });
+                    }
+                }
+                processed++;
+                const percent = 20 + (processed / allFiles.length) * 50;
+                document.querySelector('.progress-bar').style.width = `${percent}%`;
+            }
+            babItems.sort((a,b) => a.name.localeCompare(b.name));
+            renderBabList();
+            renderMediaSummary();
+            statusDiv.innerHTML = `<i class="fas fa-check-circle"></i> ZIP siap: ${allFiles.length} file, ${babItems.length} bab, ${mediaItems.images.length} gambar, ${mediaItems.audio.length} audio. Atur urutan bab!`;
+            document.querySelector('.progress-bar').style.width = '100%';
+            setTimeout(() => { progressBar.style.display = 'none'; document.querySelector('.progress-bar').style.width = '0%'; }, 600);
+        } catch (err) {
+            console.error(err);
+            statusDiv.innerHTML = '<i class="fas fa-times-circle"></i> Gagal membaca ZIP. Pastikan format benar.';
+            progressBar.style.display = 'none';
+        }
+    }
+
+    function renderBabList() {
+        if (babItems.length === 0) {
+            babContainer.innerHTML = '<div style="padding:1rem; color:#999; text-align:center;"><i class="fas fa-file-alt"></i> Tidak ada file bab XHTML (kecuali cover/toc). Upload ZIP berisi .xhtml.</div>';
+            return;
+        }
+        let html = '';
+        babItems.forEach((bab, idx) => {
+            html += `<div class="bab-item" draggable="true" data-index="${idx}">
+                        <div style="display: flex; align-items: center; flex:1;">
+                            <span class="bab-handle"><i class="fas fa-grip-vertical"></i></span>
+                            <strong>${escapeHtml(bab.title)}</strong>
+                            <span style="margin-left:8px; font-size:0.7rem; color:#777;">(${bab.name})</span>
+                        </div>
+                        <div>
+                            <button class="move-btn move-up" data-idx="${idx}"><i class="fas fa-arrow-up"></i></button>
+                            <button class="move-btn move-down" data-idx="${idx}"><i class="fas fa-arrow-down"></i></button>
+                        </div>
+                    </div>`;
+        });
+        babContainer.innerHTML = html;
+        attachDragAndDrop();
+        attachMoveButtons();
+    }
+
+    function attachDragAndDrop() {
+        const items = document.querySelectorAll('.bab-item');
+        items.forEach(item => {
+            item.addEventListener('dragstart', handleDragStart);
+            item.addEventListener('dragover', (e) => e.preventDefault());
+            item.addEventListener('drop', handleDrop);
+        });
+    }
+    let dragSrcIndex = null;
+    function handleDragStart(e) {
+        const el = e.target.closest('.bab-item');
+        if (el) { dragSrcIndex = parseInt(el.dataset.index); e.dataTransfer.effectAllowed = 'move'; }
+    }
+    function handleDrop(e) {
+        e.preventDefault();
+        const targetEl = e.target.closest('.bab-item');
+        if (targetEl && dragSrcIndex !== null) {
+            const targetIndex = parseInt(targetEl.dataset.index);
+            if (dragSrcIndex !== targetIndex) {
+                const [moved] = babItems.splice(dragSrcIndex, 1);
+                babItems.splice(targetIndex, 0, moved);
+                renderBabList();
+            }
+        }
+        dragSrcIndex = null;
+    }
+    function attachMoveButtons() {
+        document.querySelectorAll('.move-up').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const idx = parseInt(btn.dataset.idx);
+                if (idx > 0) { [babItems[idx-1], babItems[idx]] = [babItems[idx], babItems[idx-1]]; renderBabList(); }
+            });
+        });
+        document.querySelectorAll('.move-down').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const idx = parseInt(btn.dataset.idx);
+                if (idx < babItems.length-1) { [babItems[idx+1], babItems[idx]] = [babItems[idx], babItems[idx+1]]; renderBabList(); }
+            });
+        });
+    }
+
+    function renderMediaSummary() {
+        mediaSummary.innerHTML = `<i class="fas fa-image"></i> ${mediaItems.images.length} Gambar &nbsp;|&nbsp; <i class="fas fa-headphones"></i> ${mediaItems.audio.length} Audio &nbsp;|&nbsp; Cover: ${coverImagePath ? '<span style="color:#ffce00;">✅ Ditemukan</span>' : '<span style="color:#ff9e9e;">❌ Tidak ditemukan (opsional)</span>'}`;
+    }
+
+    function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); }
+    function escapeXml(str) { if (!str) return ''; return str.replace(/[<>&]/g, m => ({ '<':'&lt;', '>':'&gt;', '&':'&amp;' }[m])); }
+
+    // GENERATE FINAL ZIP
+    generateBtn.addEventListener('click', async () => {
+        if (!originalZip) { statusDiv.innerHTML = '<i class="fas fa-ban"></i> Upload ZIP terlebih dahulu.'; return; }
+        const mainTitle = document.getElementById('mainTitle').value.trim();
+        if (!mainTitle) { alert("Judul utama wajib diisi."); return; }
+        const creator = document.getElementById('creator').value.trim();
+        if (!creator) { alert("Penulis wajib diisi."); return; }
+        const language = document.getElementById('language').value.trim() || 'id';
+        let identifier = document.getElementById('identifier').value.trim();
+        if (!identifier) identifier = "urn:uuid:" + crypto.randomUUID();
+        const date = document.getElementById('date').value || new Date().toISOString().slice(0,10);
+        const publisher = document.getElementById('publisher').value.trim();
+        const description = document.getElementById('description').value.trim();
+        const subjects = document.getElementById('subjects').value.split(',').map(s=>s.trim()).filter(s=>s);
+        const collectionName = document.getElementById('collectionName').value.trim();
+        const collectionNumber = document.getElementById('collectionNumber').value.trim();
+        const subTitle = document.getElementById('subTitle').value.trim();
+        const volume = document.getElementById('volume').value.trim();
+
+        let titles = [mainTitle];
+        if (subTitle) titles.push(subTitle);
+        if (volume) titles.push(volume);
+        extraTitles.forEach(t => { if(t.trim()) titles.push(t.trim()); });
+
+        let allContributors = [{ name: creator, role: "aut" }];
+        contributors.forEach(c => { if(c.name.trim()) allContributors.push({ name: c.name.trim(), role: c.role.trim() || "ctb" }); });
+
+        const newZip = new JSZip();
+        // Salin file non-struktural
+        const skipPaths = ['content.opf', 'META-INF/container.xml', 'toc.xhtml', 'nav.xhtml', 'cover.xhtml', 'mimetype'];
+        for (const [origPath, entry] of Object.entries(zipFiles)) {
+            if (skipPaths.includes(origPath) || origPath.startsWith('META-INF/')) continue;
+            const blob = await entry.zipFile.async('blob');
+            let newPath = origPath.startsWith('EPUB/') ? origPath : 'EPUB/' + origPath;
+            newZip.file(newPath, blob);
+        }
+        newZip.file("mimetype", "application/epub+zip", { compression: "STORE" });
+        newZip.file("META-INF/container.xml", `<?xml version="1.0" encoding="UTF-8"?><container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container"><rootfiles><rootfile full-path="EPUB/content.opf" media-type="application/oebps-package+xml"/></rootfiles></container>`);
+
+        let coverImgRel = coverImagePath ? coverImagePath : "images/cover.png";
+        if (coverImgRel.startsWith('EPUB/')) coverImgRel = coverImgRel.substring(5);
+        let manifest = [], spine = [];
+        manifest.push(`<item id="cover-image" href="${escapeXml(coverImgRel)}" media-type="${coverImgRel.endsWith('.png')?'image/png':'image/jpeg'}" properties="cover-image"/>`);
+        const coverXhtmlPath = "cover.xhtml";
+        if (!hasCoverXhtml) {
+            const coverHtml = `<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="${language}"><head><title>${escapeXml(mainTitle)}</title></head><body><svg width="100%" height="100%"><image width="100%" height="100%" href="${escapeXml(coverImgRel)}"/></svg></body></html>`;
+            newZip.file("EPUB/" + coverXhtmlPath, coverHtml);
+        } else if(zipFiles[coverXhtmlPath]) newZip.file("EPUB/" + coverXhtmlPath, await zipFiles[coverXhtmlPath].zipFile.async('blob'));
+        manifest.push(`<item id="cover-xhtml" href="${coverXhtmlPath}" media-type="application/xhtml+xml"/>`);
+        spine.push(`<itemref idref="cover-xhtml" linear="yes"/>`);
+
+        const tocPath = "toc.xhtml";
+        let navPoints = babItems.map(bab => `<li><a href="${escapeXml(bab.path.startsWith('EPUB/')?bab.path.substring(5):bab.path)}">${escapeXml(bab.title)}</a></li>`).join("\n");
+        const tocContent = `<?xml version="1.0"?><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Daftar Isi</title></head><body><nav epub:type="toc"><h1>Daftar Isi</h1><ol>${navPoints}</ol></nav></body></html>`;
+        newZip.file("EPUB/" + tocPath, tocContent);
+        manifest.push(`<item id="toc" href="${tocPath}" media-type="application/xhtml+xml" properties="nav"/>`);
+        spine.push(`<itemref idref="toc" linear="no"/>`);
+
+        babItems.forEach((bab, idx) => {
+            const id = `chap_${idx+1}`;
+            let href = bab.path.startsWith('EPUB/') ? bab.path.substring(5) : bab.path;
+            manifest.push(`<item id="${id}" href="${href}" media-type="application/xhtml+xml"/>`);
+            spine.push(`<itemref idref="${id}" linear="yes"/>`);
+        });
+
+        [...mediaItems.images, ...mediaItems.audio].forEach(med => {
+            const id = `media_${med.name.replace(/[^a-zA-Z0-9]/g, '_')}`;
+            let href = med.path.startsWith('EPUB/') ? med.path.substring(5) : med.path;
+            const ext = med.name.split('.').pop().toLowerCase();
+            let mime = ext==='png'||ext==='jpg'||ext==='jpeg'?'image/jpeg': ext==='mp3'?'audio/mpeg':'application/octet-stream';
+            manifest.push(`<item id="${id}" href="${href}" media-type="${mime}"/>`);
+        });
+
+        let metadata = titles.map(t => `<dc:title>${escapeXml(t)}</dc:title>`);
+        allContributors.forEach(c => { if(c.role==='aut') metadata.push(`<dc:creator id="creator">${escapeXml(c.name)}</dc:creator>`); else metadata.push(`<dc:contributor>${escapeXml(c.name)}</dc:contributor>`); });
+        subjects.forEach(s => metadata.push(`<dc:subject>${escapeXml(s)}</dc:subject>`));
+        if(description) metadata.push(`<dc:description>${escapeXml(description)}</dc:description>`);
+        if(publisher) metadata.push(`<dc:publisher>${escapeXml(publisher)}</dc:publisher>`);
+        metadata.push(`<dc:language>${escapeXml(language)}</dc:language><dc:identifier id="pub-id">${escapeXml(identifier)}</dc:identifier><dc:date>${escapeXml(date)}</dc:date>`);
+        if(collectionName) { metadata.push(`<meta property="belongs-to-collection" id="collection">${escapeXml(collectionName)}</meta>`); if(collectionNumber) metadata.push(`<meta property="group-position" refines="#collection">${escapeXml(collectionNumber)}</meta>`); }
+        metadata.push(`<meta property="dcterms:modified">${new Date().toISOString()}</meta><meta property="rendition:layout">reflowable</meta>`);
+
+        const opf = `<?xml version="1.0" encoding="UTF-8"?><package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="pub-id" xml:lang="${language}"><metadata xmlns:dc="http://purl.org/dc/elements/1.1/">${metadata.join("\n    ")}</metadata><manifest>${manifest.join("\n    ")}</manifest><spine page-progression-direction="ltr">${spine.join("\n    ")}</spine></package>`;
+        newZip.file("EPUB/content.opf", opf);
+
+        statusDiv.innerHTML = '<i class="fas fa-cog fa-spin"></i> Membuat arsip akhir...';
+        const zipBlob = await newZip.generateAsync({ type: "blob", compression: "DEFLATE", compressionOptions: { level: 6 } });
+        const url = URL.createObjectURL(zipBlob);
+        const a = document.createElement('a'); a.href = url; a.download = "epub_completed.zip"; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+        statusDiv.innerHTML = '<i class="fas fa-check-circle"></i> Berhasil! File ZIP dengan struktur EPUB/ siap. Ekstrak dan kompres ulang dengan mimetype STORE.';
+    });
+</script>
+</body>
+</html>
