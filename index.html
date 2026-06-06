@@ -810,7 +810,11 @@
             const id = `media_${med.name.replace(/[^a-zA-Z0-9]/g, '_')}`;
             let href = med.path.startsWith('EPUB/') ? med.path.substring(5) : med.path;
             const ext = med.name.split('.').pop().toLowerCase();
-            let mime = ext==='png'||ext==='jpg'||ext==='jpeg'?'image/jpeg': ext==='mp3'?'audio/mpeg':'application/octet-stream';
+            let mime = 'application/octet-stream';
+if (ext === 'png') mime = 'image/png';
+else if (ext === 'jpg' || ext === 'jpeg') mime = 'image/jpeg';
+else if (ext === 'webp') mime = 'image/webp';
+else if (ext === 'mp3') mime = 'audio/mpeg';
             manifest.push(`<item id="${id}" href="${href}" media-type="${mime}"/>`);
         });
 
