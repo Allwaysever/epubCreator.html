@@ -1,0 +1,22 @@
+{
+  "background_color": "#0f0f0f",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "epubCreator.html",
+  "orientation": "natural",
+  "scope": "/",
+  "short_name": "epubCreator",
+  "start_url": "/index.html",
+  "theme_color": "#0f0f0f",
+  "id": "io.github.yogabyallwaysever.epubcreator",
+  "description": "epubCreator.html is a powerful client-side web tool that transforms your raw content (XHTML chapters, images, audio) into a fully structured EPUB 3 project.\nIt generates a ready-to-package ZIP archive compliant with the EPUB 3 specification – perfect for authors, publishers, and DIY e-book creators.",
+  "lang": "en",
+  "categories": [
+    "books",
+    "books &amp; reference",
+    "developer",
+    "developer tools",
+    "development",
+    "productivity"
+  ]
+}
