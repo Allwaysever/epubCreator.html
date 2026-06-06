@@ -122,12 +122,12 @@ cd ..
 
 🧰 Technology Stack
 
-· HTML5 / CSS3 – Responsive, dark rounded UI with press‑effect buttons.
-· JavaScript (ES6) – All logic runs locally in your browser.
-· JSZip – For reading and writing ZIP files.
-· Font Awesome 6 – Clean icons.
-· Outfit Font – Modern, rounded typeface.
-· SuperRoundedUI - Design UI Language from Allwaysever
+- HTML5 / CSS3 – Responsive, dark rounded UI with press‑effect buttons.
+- JavaScript (ES6) – All logic runs locally in your browser.
+- JSZip – For reading and writing ZIP files.
+- Font Awesome 6 – Clean icons.
+- Outfit Font – Modern, rounded typeface.
+- SuperRoundedUI - Design UI Language from Allwaysever
 
 No build steps, no dependencies to install – just open index.html.
 
@@ -169,10 +169,11 @@ This project is licensed under the MIT License – [see the LICENSE file for det
 
 🙏 Acknowledgements
 
-· JSZip – ZIP handling.
-· Font Awesome – Icons.
-· Outfit Font – Typography.
-· EPUB 3 Specification – Standard reference.
+- JSZip – ZIP handling.
+- Font Awesome – Icons.
+- Outfit Font – Typography.
+- EPUB 3 Specification – Standard reference.
+- SuperRoundedUI - Design UI Language.
 
 ---
 
