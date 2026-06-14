@@ -656,21 +656,21 @@
     
     function renderExtraTitles() {
         const container = document.getElementById('extraTitlesContainer');
-        container.innerHTML = extraTitles.map((title, idx) => `<div class="dynamic-item"><input type="text" value="${escapeHtml(title)}" data-idx="${idx}" class="extra-title-input" style="flex:1; background:#111114;"><button class="btn-sm danger remove-extra-title" data-idx="${idx}"><i class="fas fa-times"></i></button></div>`).join('');
+        container.innerHTML = extraTitles.map((title, idx) => `<div class="dynamic-item"><input type="text" value="${escapeHtml(title)}" data-idx="${idx}" class="extra-title-input" style="flex:1; background:#111114;"><button class="btn-sm danger remove-extra-title" data-idx="${idx}"><i class="fas fa-times"></i></button><\/div>`).join('');
         document.querySelectorAll('.extra-title-input').forEach(inp => inp.addEventListener('change', (e) => { const idx = parseInt(inp.dataset.idx); extraTitles[idx] = inp.value; saveCurrentProject(); }));
         document.querySelectorAll('.remove-extra-title').forEach(btn => btn.addEventListener('click', (e) => { const idx = parseInt(btn.dataset.idx); extraTitles.splice(idx,1); renderExtraTitles(); saveCurrentProject(); }));
     }
     function renderContributors() {
         const container = document.getElementById('contributorsContainer');
-        container.innerHTML = contributors.map((c, idx) => `<div class="dynamic-item"><input type="text" placeholder="Name" value="${escapeHtml(c.name)}" data-idx="${idx}" class="contrib-name" style="flex:2;"><input type="text" placeholder="Role" value="${escapeHtml(c.role)}" data-idx="${idx}" class="contrib-role" style="flex:1;"><button class="btn-sm danger remove-contrib" data-idx="${idx}"><i class="fas fa-user-minus"></i></button></div>`).join('');
+        container.innerHTML = contributors.map((c, idx) => `<div class="dynamic-item"><input type="text" placeholder="Name" value="${escapeHtml(c.name)}" data-idx="${idx}" class="contrib-name" style="flex:2;"><input type="text" placeholder="Role" value="${escapeHtml(c.role)}" data-idx="${idx}" class="contrib-role" style="flex:1;"><button class="btn-sm danger remove-contrib" data-idx="${idx}"><i class="fas fa-user-minus"></i></button><\/div>`).join('');
         document.querySelectorAll('.contrib-name').forEach(inp => inp.addEventListener('change', (e) => { const idx = parseInt(inp.dataset.idx); contributors[idx].name = inp.value; saveCurrentProject(); }));
         document.querySelectorAll('.contrib-role').forEach(inp => inp.addEventListener('change', (e) => { const idx = parseInt(inp.dataset.idx); contributors[idx].role = inp.value; saveCurrentProject(); }));
         document.querySelectorAll('.remove-contrib').forEach(btn => btn.addEventListener('click', (e) => { const idx = parseInt(btn.dataset.idx); contributors.splice(idx,1); renderContributors(); saveCurrentProject(); }));
     }
     function renderBabList() {
-        if (!babItems.length) { babContainer.innerHTML = '<div style="padding:1rem; text-align:center; color:#888;">No chapters yet. Upload ZIP.</div>'; return; }
+        if (!babItems.length) { babContainer.innerHTML = '<div style="padding:1rem; text-align:center; color:#888;">No chapters yet. Upload ZIP.<\/div>'; return; }
         let html = '';
-        babItems.forEach((bab, idx) => { html += `<div class="bab-item" draggable="true" data-index="${idx}"><div style="display:flex; align-items:center; gap:8px; flex:1;"><i class="fas fa-grip-vertical" style="cursor:grab; color:#aaa;"></i><input type="text" class="bab-title" value="${escapeHtml(bab.title)}" data-idx="${idx}" style="background:none; border:none;"></div><div><button class="move-btn move-up" data-idx="${idx}"><i class="fas fa-chevron-up"></i></button><button class="move-btn move-down" data-idx="${idx}"><i class="fas fa-chevron-down"></i></button></div></div>`; });
+        babItems.forEach((bab, idx) => { html += `<div class="bab-item" draggable="true" data-index="${idx}"><div style="display:flex; align-items:center; gap:8px; flex:1;"><i class="fas fa-grip-vertical" style="cursor:grab; color:#aaa;"></i><input type="text" class="bab-title" value="${escapeHtml(bab.title)}" data-idx="${idx}" style="background:none; border:none;"></div><div><button class="move-btn move-up" data-idx="${idx}"><i class="fas fa-chevron-up"></i></button><button class="move-btn move-down" data-idx="${idx}"><i class="fas fa-chevron-down"></i></button><\/div><\/div>`; });
         babContainer.innerHTML = html;
         document.querySelectorAll('.bab-title').forEach(inp => inp.addEventListener('change', (e) => { const idx = parseInt(inp.dataset.idx); babItems[idx].title = inp.value; saveCurrentProject(); }));
         attachDragAndDrop(); attachMoveButtons();
@@ -680,7 +680,7 @@
     function handleDragStart(e) { const el = e.target.closest('.bab-item'); if(el) { dragSrcIndex = parseInt(el.dataset.index); e.dataTransfer.effectAllowed = 'move'; } }
     function handleDrop(e) { e.preventDefault(); const targetEl = e.target.closest('.bab-item'); if(targetEl && dragSrcIndex !== null) { const targetIndex = parseInt(targetEl.dataset.index); if(dragSrcIndex !== targetIndex) { const [moved] = babItems.splice(dragSrcIndex,1); babItems.splice(targetIndex,0,moved); renderBabList(); saveCurrentProject(); } dragSrcIndex = null; } }
     function attachMoveButtons() { document.querySelectorAll('.move-up').forEach(btn => btn.addEventListener('click', () => { const idx = parseInt(btn.dataset.idx); if(idx>0) { [babItems[idx-1], babItems[idx]] = [babItems[idx], babItems[idx-1]]; renderBabList(); saveCurrentProject(); } })); document.querySelectorAll('.move-down').forEach(btn => btn.addEventListener('click', () => { const idx = parseInt(btn.dataset.idx); if(idx<babItems.length-1) { [babItems[idx+1], babItems[idx]] = [babItems[idx], babItems[idx+1]]; renderBabList(); saveCurrentProject(); } })); }
-    function renderMediaSummary() { mediaSummary.innerHTML = `<i class="fas fa-image"></i> ${mediaItems.images.length} Images &nbsp;| <i class="fas fa-headphones"></i> ${mediaItems.audio.length} Audio &nbsp;| <span class="chip-accent" style="display:inline-block;">Cover: ${coverImagePath ? '✅ Yes' : '❌ No'}</span>`; }
+    function renderMediaSummary() { mediaSummary.innerHTML = `<i class="fas fa-image"></i> ${mediaItems.images.length} Images &nbsp;| <i class="fas fa-headphones"></i> ${mediaItems.audio.length} Audio &nbsp;| <span class="chip-accent" style="display:inline-block;">Cover: ${coverImagePath ? '✅ Yes' : '❌ No'}<\/span>`; }
     
     fileZone.addEventListener('click', () => zipInput.click());
     zipInput.addEventListener('change', handleZipUpload);
@@ -747,36 +747,36 @@
             newZip.file(relPath.startsWith('EPUB/') ? relPath : 'EPUB/' + relPath, blob);
         }
         newZip.file("mimetype", "application/epub+zip", { compression: "STORE" });
-        newZip.file("META-INF/container.xml", `<?xml version="1.0" encoding="UTF-8"?><container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container"><rootfiles><rootfile full-path="EPUB/content.opf" media-type="application/oebps-package+xml"/></rootfiles></container>`);
+        newZip.file("META-INF/container.xml", `<?xml version="1.0" encoding="UTF-8"?><container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container"><rootfiles><rootfile full-path="EPUB/content.opf" media-type="application/oebps-package+xml"/><\/rootfiles><\/container>`);
         let coverImgRel = coverImagePath ? coverImagePath : "images/cover.png";
         if (coverImgRel.startsWith('EPUB/')) coverImgRel = coverImgRel.substring(5);
         let manifest = [], spine = [];
         manifest.push(`<item id="cover-image" href="${escapeXml(coverImgRel)}" media-type="${coverImgRel.endsWith('.png')?'image/png':'image/jpeg'}" properties="cover-image"/>`);
         const coverXhtmlPath = "cover.xhtml";
-        if (!hasCoverXhtml) newZip.file("EPUB/" + coverXhtmlPath, `<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"><head><title>${escapeXml(mainTitle)}</title></head><body><svg width="100%" height="100%"><image width="100%" height="100%" href="${escapeXml(coverImgRel)}"/></svg></body></html>`);
+        if (!hasCoverXhtml) newZip.file("EPUB/" + coverXhtmlPath, `<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"><head><title>${escapeXml(mainTitle)}<\/title><\/head><body><svg width="100%" height="100%"><image width="100%" height="100%" href="${escapeXml(coverImgRel)}"/><\/svg><\/body><\/html>`);
         else { const coverFile = zip.files[coverXhtmlPath]; if(coverFile) newZip.file("EPUB/"+coverXhtmlPath, await coverFile.async('blob')); }
         manifest.push(`<item id="cover-xhtml" href="${coverXhtmlPath}" media-type="application/xhtml+xml"/>`);
         spine.push(`<itemref idref="cover-xhtml" linear="yes"/>`);
-        const navPoints = babItems.map(bab => `<li><a href="${escapeXml(bab.path.startsWith('EPUB/')?bab.path.substring(5):bab.path)}">${escapeXml(bab.title)}</a></li>`).join("\n");
-        newZip.file("EPUB/toc.xhtml", `<?xml version="1.0"?><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Table of Contents</title></head><body><nav epub:type="toc"><h1>Table of Contents</h1><ol>${navPoints}</ol></nav></body></html>`);
+        const navPoints = babItems.map(bab => `<li><a href="${escapeXml(bab.path.startsWith('EPUB/')?bab.path.substring(5):bab.path)}">${escapeXml(bab.title)}<\/a><\/li>`).join("\n");
+        newZip.file("EPUB/toc.xhtml", `<?xml version="1.0"?><html xmlns="http://www.w3.org/1999/xhtml"><head><title>Table of Contents<\/title><\/head><body><nav epub:type="toc"><h1>Table of Contents<\/h1><ol>${navPoints}<\/ol><\/nav><\/body><\/html>`);
         manifest.push(`<item id="toc" href="toc.xhtml" media-type="application/xhtml+xml" properties="nav"/>`);
         spine.push(`<itemref idref="toc" linear="no"/>`);
         babItems.forEach((bab, idx) => { const id = `chap_${idx+1}`; let href = bab.path.startsWith('EPUB/') ? bab.path.substring(5) : bab.path; manifest.push(`<item id="${id}" href="${href}" media-type="application/xhtml+xml"/>`); spine.push(`<itemref idref="${id}" linear="yes"/>`); });
         [...mediaItems.images, ...mediaItems.audio].forEach(med => { const id = `media_${med.name.replace(/[^a-zA-Z0-9]/g, '_')}`; let href = med.path.startsWith('EPUB/') ? med.path.substring(5) : med.path; const ext = med.name.split('.').pop().toLowerCase(); let mime = ext==='png'?'image/png':ext==='jpg'||ext==='jpeg'?'image/jpeg':ext==='webp'?'image/webp':ext==='mp3'?'audio/mpeg':'application/octet-stream'; manifest.push(`<item id="${id}" href="${href}" media-type="${mime}"/>`); });
         let titles = [mainTitle]; if (document.getElementById('subTitle').value.trim()) titles.push(document.getElementById('subTitle').value.trim()); if (document.getElementById('volume').value.trim()) titles.push(document.getElementById('volume').value.trim()); extraTitles.forEach(t => { if(t.trim()) titles.push(t.trim()); });
         let allContributors = [{ name: creator, role: "aut" }]; contributors.forEach(c => { if(c.name.trim()) allContributors.push({ name: c.name.trim(), role: c.role.trim() || "ctb" }); });
-        let metadata = titles.map(t => `<dc:title>${escapeXml(t)}</dc:title>`);
-        allContributors.forEach(c => { if(c.role==='aut') metadata.push(`<dc:creator id="creator">${escapeXml(c.name)}</dc:creator>`); else metadata.push(`<dc:contributor>${escapeXml(c.name)}</dc:contributor>`); });
-        const subjects = document.getElementById('subjects').value.split(',').map(s=>s.trim()).filter(s=>s); subjects.forEach(s => metadata.push(`<dc:subject>${escapeXml(s)}</dc:subject>`));
-        if(document.getElementById('description').value.trim()) metadata.push(`<dc:description>${escapeXml(document.getElementById('description').value)}</dc:description>`);
-        if(document.getElementById('publisher').value.trim()) metadata.push(`<dc:publisher>${escapeXml(document.getElementById('publisher').value)}</dc:publisher>`);
-        metadata.push(`<dc:language>${escapeXml(document.getElementById('language').value)}</dc:language>`);
+        let metadata = titles.map(t => `<dc:title>${escapeXml(t)}<\/dc:title>`);
+        allContributors.forEach(c => { if(c.role==='aut') metadata.push(`<dc:creator id="creator">${escapeXml(c.name)}<\/dc:creator>`); else metadata.push(`<dc:contributor>${escapeXml(c.name)}<\/dc:contributor>`); });
+        const subjects = document.getElementById('subjects').value.split(',').map(s=>s.trim()).filter(s=>s); subjects.forEach(s => metadata.push(`<dc:subject>${escapeXml(s)}<\/dc:subject>`));
+        if(document.getElementById('description').value.trim()) metadata.push(`<dc:description>${escapeXml(document.getElementById('description').value)}<\/dc:description>`);
+        if(document.getElementById('publisher').value.trim()) metadata.push(`<dc:publisher>${escapeXml(document.getElementById('publisher').value)}<\/dc:publisher>`);
+        metadata.push(`<dc:language>${escapeXml(document.getElementById('language').value)}<\/dc:language>`);
         let identifier = document.getElementById('identifier').value.trim(); if(!identifier) identifier = "urn:uuid:" + crypto.randomUUID();
-        metadata.push(`<dc:identifier id="pub-id">${escapeXml(identifier)}</dc:identifier><dc:date>${escapeXml(document.getElementById('date').value || new Date().toISOString().slice(0,10))}</dc:date>`);
+        metadata.push(`<dc:identifier id="pub-id">${escapeXml(identifier)}<\/dc:identifier><dc:date>${escapeXml(document.getElementById('date').value || new Date().toISOString().slice(0,10))}<\/dc:date>`);
         const collectionName = document.getElementById('collectionName').value.trim(); const collectionNumber = document.getElementById('collectionNumber').value.trim();
-        if(collectionName) { metadata.push(`<meta property="belongs-to-collection" id="collection">${escapeXml(collectionName)}</meta>`); if(collectionNumber) metadata.push(`<meta property="group-position" refines="#collection">${escapeXml(collectionNumber)}</meta>`); }
-        metadata.push(`<meta property="dcterms:modified">${new Date().toISOString()}</meta><meta property="rendition:layout">reflowable</meta>`);
-        const opf = `<?xml version="1.0" encoding="UTF-8"?><package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="pub-id" xml:lang="${escapeXml(document.getElementById('language').value)}"><metadata xmlns:dc="http://purl.org/dc/elements/1.1/">${metadata.join("\n    ")}</metadata><manifest>${manifest.join("\n    ")}</manifest><spine page-progression-direction="ltr">${spine.join("\n    ")}</spine></package>`;
+        if(collectionName) { metadata.push(`<meta property="belongs-to-collection" id="collection">${escapeXml(collectionName)}<\/meta>`); if(collectionNumber) metadata.push(`<meta property="group-position" refines="#collection">${escapeXml(collectionNumber)}<\/meta>`); }
+        metadata.push(`<meta property="dcterms:modified">${new Date().toISOString()}<\/meta><meta property="rendition:layout">reflowable<\/meta>`);
+        const opf = `<?xml version="1.0" encoding="UTF-8"?><package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="pub-id" xml:lang="${escapeXml(document.getElementById('language').value)}"><metadata xmlns:dc="http://purl.org/dc/elements/1.1/">${metadata.join("\n    ")}<\/metadata><manifest>${manifest.join("\n    ")}<\/manifest><spine page-progression-direction="ltr">${spine.join("\n    ")}<\/spine><\/package>`;
         newZip.file("EPUB/content.opf", opf);
         const zipBlob = await newZip.generateAsync({ type: "blob", compression: "DEFLATE", compressionOptions: { level: 6 } });
         const url = URL.createObjectURL(zipBlob); const a = document.createElement('a'); a.href = url; a.download = `${mainTitle.replace(/[^a-z0-9]/gi, '_')}_epub.zip`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
@@ -785,7 +785,7 @@
     });
     
     document.getElementById('resetProjectBtn').addEventListener('click', async () => { if(confirm('Delete all data of this project?')) { await deleteProject(projectId); projectId = Date.now().toString(); localStorage.setItem('current_project_id', projectId); location.reload(); } });
-    document.getElementById('downloadTemplateBtn').addEventListener('click', () => { const template = `<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head><title>Chapter Title</title><meta name="viewport" content="width=device-width"/></head><body><h1>Chapter Title</h1><p>Write content here.</p></body></html>`; const blob = new Blob([template], {type:"application/xhtml+xml"}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = "template-chapter.xhtml"; a.click(); URL.revokeObjectURL(a.href); });
+    document.getElementById('downloadTemplateBtn').addEventListener('click', () => { const template = `<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head><title>Chapter Title<\/title><meta name="viewport" content="width=device-width"/><\/head><body><h1>Chapter Title<\/h1><p>Write content here.<\/p><\/body><\/html>`; const blob = new Blob([template], {type:"application/xhtml+xml"}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = "template-chapter.xhtml"; a.click(); URL.revokeObjectURL(a.href); });
     const autoSaveFields = ['mainTitle','subTitle','volume','creator','language','identifier','date','publisher','description','subjects','collectionName','collectionNumber'];
     autoSaveFields.forEach(id => { document.getElementById(id)?.addEventListener('input', () => saveCurrentProject()); });
     document.getElementById('addExtraTitleBtn')?.addEventListener('click', () => { extraTitles.push(''); renderExtraTitles(); saveCurrentProject(); });
